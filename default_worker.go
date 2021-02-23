@@ -3,7 +3,6 @@ package workers
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 	"time"
 )
@@ -80,7 +79,6 @@ func (d *DefaultWorker) AddJob(j interface{}) error {
 	if d.ctx.Err() != nil {
 		return d.ctx.Err()
 	}
-	fmt.Println("Add a job")
 	d.jobChan <- j
 	return nil
 }
