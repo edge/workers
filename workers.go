@@ -18,7 +18,7 @@ type Pool struct {
 
 func (p *Pool) Add(ctx context.Context, wrk Worker) (Worker, error) {
 	// If the worker already exists, return an error and the existing worker.
-	if worker, loaded := p.Upsert(wrk.GetID(), wrk); loaded {
+	if worker, loaded := p.InsertUnique(wrk.GetID(), wrk); loaded {
 		return worker.(Worker), ErrDuplicateKey
 	}
 
