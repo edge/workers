@@ -3,12 +3,12 @@ package workers
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/edge/atomicstore"
 )
 
 var (
-	ErrDuplicateKey         = errors.New("A worker with this key already exists")
 	ErrBroadcastInvalidType = errors.New("Failed to broadcast to Invalid worker")
 )
 
@@ -19,7 +19,7 @@ type Pool struct {
 func (p *Pool) Add(ctx context.Context, wrk Worker) (Worker, error) {
 	// If the worker already exists, return an error and the existing worker.
 	if worker, loaded := p.InsertUnique(wrk.GetID(), wrk); loaded {
-		return worker.(Worker), ErrDuplicateKey
+		return worker.(Worker), fmt.Errorf(`A worker with key %s already exists`, wrk.GetID())
 	}
 
 	wrk.Start(ctx)
