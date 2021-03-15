@@ -22,9 +22,9 @@ func (p *Pool) Add(ctx context.Context, wrk Worker) (Worker, error) {
 		return worker.(Worker), fmt.Errorf(`A worker with key %s already exists`, wrk.GetID())
 	}
 
-	wrk.Start(ctx)
+	err := wrk.Start(ctx)
 
-	return wrk, nil
+	return wrk, err
 }
 
 // Remove stops the worker and removes it from the pool.
