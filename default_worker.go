@@ -3,7 +3,6 @@ package workers
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 	"time"
 )
@@ -26,7 +25,6 @@ type DefaultWorker struct {
 }
 
 func (d *DefaultWorker) handleJobs() {
-	defer close(d.jobChan)
 	for {
 		select {
 		case <-d.ctx.Done():
@@ -37,7 +35,6 @@ func (d *DefaultWorker) handleJobs() {
 			}
 		}
 	}
-	fmt.Println("ALWAYS CLOSE")
 }
 
 // GetID returns the ID of the worker.
