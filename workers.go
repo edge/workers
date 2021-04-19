@@ -52,6 +52,6 @@ func (p *Pool) Broadcast(job interface{}) (err error) {
 // New returns a new instance of workers.
 func New() *Pool {
 	return &Pool{
-		Store: atomicstore.New(true),
+		Store: atomicstore.New(false),
 	}
 }
