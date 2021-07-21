@@ -8,8 +8,9 @@ import (
 )
 
 var (
-	ErrJobHandlerExists = errors.New("This workers job handler already exists")
-	ErrInvalidContext   = errors.New("Cannot start worker with invalid context")
+	ErrJobHandlerExists        = errors.New("This workers job handler already exists")
+	ErrInvalidContext          = errors.New("Cannot start worker with invalid context")
+	ErrJobChannelHasNoReceiver = errors.New("This workers job channel has no receiver")
 )
 
 // DefaultWorker uses the Worker interface.
@@ -77,8 +78,12 @@ func (d *DefaultWorker) AddJob(j interface{}) error {
 	if d.ctx.Err() != nil {
 		return d.ctx.Err()
 	}
-	d.jobChan <- j
-	return nil
+	select {
+	case d.jobChan <- j:
+		return nil
+	default:
+		return ErrJobChannelHasNoReceiver
+	}
 }
 
 // ScheduleJob schedules a job for a later time.
